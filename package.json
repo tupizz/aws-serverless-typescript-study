@@ -1,0 +1,39 @@
+{
+  "name": "serverless-ts",
+  "version": "1.0.0",
+  "description": "Serverless webpack example using Typescript",
+  "main": "handler.js",
+  "scripts": {
+    "dev": "sls offline start --disableCookieValidation --httpPort 3010 --lambdaPort 4010 --useChildProcesses",
+    "start": "concurrently -n w: npm:dev:*",
+    "dev:local-dynamo": "sls dynamodb start --port 8000",
+    "dev:local-serverless": "sls offline -v"
+  },
+  "dependencies": {
+    "@middy/core": "^1.0.0",
+    "@middy/http-error-handler": "^1.0.0",
+    "@middy/http-event-normalizer": "^1.0.0",
+    "@middy/http-json-body-parser": "^1.0.0",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/uuid": "^8.0.0",
+    "aws-sdk": "^2.713.0",
+    "concurrently": "^5.2.0",
+    "http-errors": "^1.8.0",
+    "source-map-support": "^0.5.10",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.17",
+    "@types/node": "^10.12.18",
+    "fork-ts-checker-webpack-plugin": "^3.0.1",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^6.4.0",
+    "serverless-webpack": "^5.2.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.2.4",
+    "webpack": "^4.29.0",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT"
+}

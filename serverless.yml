@@ -1,0 +1,62 @@
+service:
+  name: serverless-ts
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+  tableNames:
+    auctions: 'AuctionsTable'
+
+  endpoints:
+    dynamodb-url: 'http://localhost:8000'
+
+  dynamodb:
+    start:
+      migrate: true
+    stages:
+      - dev
+
+plugins:
+  - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  iamRoleStatements:
+    - ${file(aws/iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    CONFIG_AUCTIONS_TABLE: ${self:custom.tableNames.auctions}
+    CONFIG_DYNAMODB_ENDPOINT: ${self:custom.endpoints.dynamodb-url}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+resources:
+  Resources:
+    AuctionsTable: ${file(aws/resources/AuctionsTable.yml):AuctionsTable}
+
+functions:
+  getAuctions:
+    handler: src/handlers/getAuctions.handler
+    events:
+      - http:
+          method: get
+          path: /auctions
+
+  getAuctionById:
+    handler: src/handlers/getAuctionById.handler
+    events:
+      - http:
+          method: get
+          path: /auction/{id}
+
+  createAuction:
+    handler: src/handlers/createAuction.handler
+    events:
+      - http:
+          method: post
+          path: /auctions
