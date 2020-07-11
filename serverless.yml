@@ -44,19 +44,26 @@ functions:
     handler: src/handlers/getAuctions.handler
     events:
       - http:
-          method: get
+          method: GET
           path: /auctions
 
   getAuctionById:
     handler: src/handlers/getAuctionById.handler
     events:
       - http:
-          method: get
+          method: GET
           path: /auction/{id}
+
+  placeBid:
+    handler: src/handlers/placeBid.handler
+    events:
+      - http:
+          method: PATCH
+          path: /auctions/{id}/bid
 
   createAuction:
     handler: src/handlers/createAuction.handler
     events:
       - http:
-          method: post
+          method: POST
           path: /auctions

@@ -9,12 +9,17 @@ import middleware from '../common/middleware';
 
 const CONFIG_AUCTIONS_TABLE = process.env.CONFIG_AUCTIONS_TABLE;
 
-const handlerFn: APIGatewayProxyHandler = async (event, _context) => {
-  console.log(event);
-  const { id } = event.pathParameters;
+interface Auction {
+  createdAt: Date;
+  id: string;
+  title: string;
+  highestBid: {
+    amount: number;
+  };
+  status: 'OPEN' | 'CLOSED';
+}
 
-  console.log(id);
-
+export const getAuctionById = async (id): Promise<Auction> => {
   try {
     const result = await dynamoDb
       .get({
@@ -25,17 +30,26 @@ const handlerFn: APIGatewayProxyHandler = async (event, _context) => {
 
     if (!result.Item) throw new NotFound();
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(result.Item),
-    };
+    return result.Item as Auction;
   } catch (error) {
     if (error instanceof NotFound) {
-      throw new NotFound();
+      throw new NotFound(`Auction with id ${id} was not found.`);
     }
 
-    throw new InternalServerError();
+    throw new InternalServerError(
+      'Something wrong occurs in ours side, sorry =('
+    );
   }
+};
+
+const handlerFn: APIGatewayProxyHandler = async (event, _context) => {
+  const { id } = event.pathParameters;
+  const auction = await getAuctionById(id);
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ auction }),
+  };
 };
 
 export const handler = middleware(handlerFn);

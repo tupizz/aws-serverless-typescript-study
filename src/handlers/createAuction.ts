@@ -26,6 +26,9 @@ const handlerFn: APIGatewayProxyHandler = async (event, _context) => {
     title,
     status: 'OPEN',
     createdAt: new Date().toISOString(),
+    highestBid: {
+      amount: 0,
+    },
   };
 
   try {
