@@ -16,7 +16,7 @@
     "@middy/http-json-body-parser": "^1.0.0",
     "@types/aws-sdk": "^2.7.0",
     "@types/uuid": "^8.0.0",
-    "aws-sdk": "^2.713.0",
+    "aws-sdk": "^2.814.0",
     "concurrently": "^5.2.0",
     "http-errors": "^1.8.0",
     "source-map-support": "^0.5.10",
